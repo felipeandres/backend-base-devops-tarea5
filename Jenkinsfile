@@ -40,6 +40,11 @@ pipeline {
                 }
             }
         }
+        stage('Docker'){
+            steps{
+                sh 'docker build -t backend-base-devops-tarea5:latest .'
+            }
+        }
     }
             
 }
