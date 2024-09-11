@@ -15,29 +15,30 @@ pipeline {
                     image 'node:20.11.1-alpine3.19'
                 }
             }
-            steps {
-                script {
-                    sh 'npm install'
+        stages {
+                stage('Instalada dependencias') {
+                    steps {
+                        script {
+                            sh 'npm install'
+                        }
+                }
+                stage('Testing') {
+                    steps {
+                        script {
+                            sh 'npm test'
+                        }
+                    }
+                }
+
+                stage('Build') {
+                    steps {
+                        script {
+                            sh 'npm run build'
+                        }
+                    }
                 }
             }
         }
-        stages {
-            stage('Testing') {
-                steps {
-                    script {
-                        sh 'npm test'
-                    }
-                }
-            }
-
-            stage('Build') {
-                steps {
-                    script {
-                        sh 'npm run build'
-                    }
-                }
-            }
-
             stage('SonarQube: Upload Report') {
                 steps {
                     script {
@@ -47,7 +48,7 @@ pipeline {
                     }
                 }
             }
-        }
+        
         stage('SonarQube: Quality Gate') {
             steps {
                 script {
