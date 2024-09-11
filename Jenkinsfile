@@ -14,30 +14,22 @@ pipeline {
                 docker {
                     image 'node:20.11.1-alpine3.19'
                 }
-            
+            }
             steps {
                 script {
                     sh 'npm install'
                 }
             }
-        }
-
-        stage('Testing') {
-            steps {
+             steps {
                 script {
                     sh 'npm test'
                 }
             }
-        }
-
-        stage('Build') {
-            steps {
+             steps {
                 script {
                     sh 'npm run build'
                 }
             }
         }
-    }
-        
     }
 }
