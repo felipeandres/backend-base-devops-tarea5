@@ -40,6 +40,31 @@ pipeline {
                 }
             }
         }
+        stage('Calidad Tarea 5'){
+            stages {
+                stage('SonarQube analysis') {
+                    agent {
+                        docker {
+                            image 'sonarsource/sonar-scanner-cli' 
+                            args '--network="devops-infra_default"'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        withSonarQubeEnv('sonarqubetarea5') {
+                            sh 'sonar-scanner'
+                        }
+                    }
+                }
+                stage('Calidad Gate') {
+                    steps {
+                        timeout(time: 10, unit: 'SECONDS') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
+            }
+        }
         stage('Docker'){
             steps{
                 sh 'docker build -t backend-base-devops-tarea5:latest .'
