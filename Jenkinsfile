@@ -16,6 +16,7 @@ pipeline {
                     reuseNode true
                 }
             }
+        }
         stage('Instalar dependencias') {
             steps {
                 script {
