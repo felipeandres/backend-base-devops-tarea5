@@ -9,15 +9,12 @@ pipeline {
     }
 
     stages {
-        stage('Build and test') {
-            agent {
+        stage('Instalar dependencias') {
+            agent{
                 docker {
-                    image 'node:20.11.1-alpine3.19' 
-                    reuseNode true
+                    image 'node:20.11.1-alpine3.19'
                 }
             }
-        }
-        stage('Instalar dependencias') {
             steps {
                 script {
                     sh 'npm install'
