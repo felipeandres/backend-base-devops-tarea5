@@ -33,6 +33,37 @@ pipeline {
                 sh 'npm run build'
             }
         }
+
+        stage('SonarQube: Upload Report') {
+            steps {
+                withSonarQubeEnv('SonarQube') { 
+                    sh 'sonar-scanner'
+                }
+            }
+        }
+
+        stage('SonarQube: Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                sh 'docker build -t ${DOCKER_REGISTRY}/my-app:${env.BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Subir imagen al registry Nexus') {
+            steps {
+                sh 'docker push ${DOCKER_REGISTRY}/my-app:${env.BUILD_NUMBER}'
+            }
+        }
+
+        stage('Actualizar imagen en Kubernetes') {
+            steps {
+                sh 'kubectl set image deployment/${K8S_DEPLOYMENT} my-app=${DOCKER_REGISTRY}/my-app:${env.BUILD_NUMBER} -n ${K8S_NAMESPACE}'
+            }
         }
     }
 }
