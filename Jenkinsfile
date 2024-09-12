@@ -46,7 +46,7 @@ pipeline {
                     agent {
                         docker {
                             image 'sonarsource/sonar-scanner-cli' 
-                            args '--network="bridge"'
+                            args '--network="devops-infra"'
                             reuseNode true
                         }
                     }
